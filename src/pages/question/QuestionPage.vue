@@ -1,56 +1,73 @@
 <template>
   <div id="question-page">
-    <input v-model:questionName>{{ questionName }}<input/>
-    <ul id="example-1">
-      <li v-for="option in options" :key="option.name">
-        {{ option.name }}
-      </li>
-    </ul>
-    <input name="NewOption" placeholder="Capture New Option" v-model:newOption> <input/>
-    <button v-on:click="addOption()">Add</button>
-    <button v-on:click="publishQuestion()">Publish</button>
+    <div>
+      Session Id: {{ sessionId }}
+      Session Type: {{ sessionType }}
+    </div>
+    <table>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+      </tr>
+      <tr v-for="question in questions" :key="question.id">
+        <td>{{ question.id }}</td>
+        <td>{{ question.title }}</td>
+      </tr>
+    </table>
+    <div>
+      <button v-on:click="addQuestion()">Add</button>
+    </div>
   </div>
 </template>
 
 <script>
 
-import QuestionAPIUtil from '@/pages/question/api/QuestionAPIUtil';
+import { QUESTION_GET_ALL } from '@/pages/question/api/QuestionAPI';
 
 export default {
   name: 'QuestionPage',
-  data: {
-    newOption: null,
-    questionName: 'What is the best programming language?',
-    options: [
-      {
-        name: 'Java'
-      },
-      {
-        name: 'Kotlin'
-      },
-      {
-        name: 'SQL'
-      }
-    ]
+  data: function ()
+  {
+    return {
+      questions: [],
+      sessionType: 'Unknown',
+      sessionId: 0
+    }
   },
   methods: {
-    addOption()
+    addQuestion()
     {
-      if (this.newOption !== null)
-      {
-        let option = { name: this.newOption }
-        this.options.push(option);
-        this.newOption = null;
-      }
-    },
-    publishQuestion()
-    {
-      QuestionAPIUtil.CREATE(this.questionName, this.options)
+      this.$router.push('/question/add');
     }
+  },
+  created: function ()
+  {
+    this.sessionId = this.$store.getters['session/getSessionCode'];
+    QUESTION_GET_ALL(this.sessionId).then((rsp) =>
+    {
+      if (rsp.data)
+        this.questions = rsp.data;
+    });
+
+    this.sessionType = this.$store.getters['session/displayConnType'];
   }
 }
 </script>
 
 <style scoped>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
 
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
 </style>

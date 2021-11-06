@@ -1,33 +1,40 @@
 export default {
+	namespaced: true,
 	state: () => ({
-		sessionId: 0,
+		sessionCode: 0,
 		connTypeId: 0
 	}),
 	mutations: {
-		setMasterSessionId(state, sessionId)
+		setMasterSessionCode(state, sessionCode)
 		{
-			state.sessionId = sessionId;
+			state.sessionCode = sessionCode;
 			state.connTypeId = 1;
 		},
-		setChildSessionId(state, sessionId)
+		setChildSessionCode(state, sessionCode)
 		{
-			state.sessionId = sessionId;
+			state.sessionCode = sessionCode;
 			state.connTypeId = 2;
 		}
 	},
 
 	getters: {
-		getSessionId(state)
+		getSessionCode(state)
 		{
-			return state.sessionId
+			return state.sessionCode
 		},
 		isMasterConnTypeId(state)
 		{
-			return state.connTypeId == 1;
+			return state.connTypeId === 1;
 		},
 		isChildConnTypeId(state)
 		{
-			return state.connTypeId == 2;
+			return state.connTypeId === 2;
+		},
+		displayConnType(state, getters)
+		{
+			if (getters.isMasterConnTypeId) return 'Master';
+			else if (getters.isChildConnTypeId) return 'Child';
+			else return 'Unknown';
 		}
 	}
 }
