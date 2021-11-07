@@ -1,7 +1,7 @@
 import SessionPage from '@/pages/session/SessionPage';
 
 export default {
-	path: '/session',
+	path: '/',
 	name: 'Session',
 	component: SessionPage,
 };

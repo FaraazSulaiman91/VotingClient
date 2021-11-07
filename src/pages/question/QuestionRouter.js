@@ -1,7 +1,7 @@
 import QuestionPage from '@/pages/question/QuestionPage';
 
 export default {
-	path: '/question',
+	path: '/:sessionCode',
 	name: 'Question',
 	component: QuestionPage,
 };

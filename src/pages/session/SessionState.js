@@ -14,6 +14,11 @@ export default {
 		{
 			state.sessionCode = sessionCode;
 			state.connTypeId = 2;
+		},
+		resetSessionCode(state)
+		{
+			state.sessionCode = 0;
+			state.connTypeId = 0;
 		}
 	},
 

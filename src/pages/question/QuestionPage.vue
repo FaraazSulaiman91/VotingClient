@@ -8,14 +8,19 @@
       <tr>
         <th>Id</th>
         <th>Title</th>
+<!--        <th>Action</th>-->
       </tr>
       <tr v-for="question in questions" :key="question.id">
         <td>{{ question.id }}</td>
         <td>{{ question.title }}</td>
+        <!--        <td>-->
+        <!--          <button name="openQuestion" v-on:onclick="openQuestion(question.id)">Open</button>-->
+        <!--        </td>-->
       </tr>
     </table>
     <div>
-      <button v-on:click="addQuestion()">Add</button>
+      <button v-if="canAddQuestion()" v-on:click="addQuestion()">Add</button>
+      <button v-on:click="goHome()">Home</button>
     </div>
   </div>
 </template>
@@ -37,7 +42,20 @@ export default {
   methods: {
     addQuestion()
     {
-      this.$router.push('/question/add');
+      this.$router.push('/' + this.sessionId + '/question/add');
+    },
+    // openQuestion(questionId)
+    // {
+    //   this.$router.push('/' + this.sessionId + '/question/view/' + questionId);
+    // },
+    goHome()
+    {
+      this.$store.commit('session/resetSessionCode')
+      this.$router.push('/');
+    },
+    canAddQuestion()
+    {
+      return this.$store.getters['session/isMasterConnTypeId'];
     }
   },
   created: function ()

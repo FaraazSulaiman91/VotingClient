@@ -1,7 +1,9 @@
 <template>
   <div id="question-add">
-    <input name="title" type="text" v-model="title" placeholder="Enter the full question"/>
+    <input name="title" type="text" size="50" v-model="title" placeholder="Enter the full question"/>
+    <br>
     <button name="add" v-on:click="add()">Add</button>
+    <button name="add" v-on:click="back()">Back</button>
   </div>
 </template>
 
@@ -18,11 +20,17 @@ export default {
   methods: {
     add: function ()
     {
-      QUESTION_CREATE(this.title, this.$store.getters['session/getSessionCode']).then((rsp) =>
+      let sessionCode = this.$store.getters['session/getSessionCode'];
+      QUESTION_CREATE(this.title, sessionCode).then((rsp) =>
       {
         if (rsp.data)
-          this.$router.push('/question')
+          this.$router.push('/' + sessionCode)
       });
+    },
+    back: function ()
+    {
+      let sessionCode = this.$store.getters['session/getSessionCode'];
+      this.$router.push('/' + sessionCode)
     }
   }
 }

@@ -3,7 +3,7 @@
     <button v-on:click="createSession()">Create Session</button>
     <span> OR </span>
     <button v-on:click="joinSession()">Join Session</button>
-    <input name="existingSession" placeholder="Enter Session Code">
+    <input name="existingSession" v-model="existingSessionCode" placeholder="Enter Session Code">
   </div>
 </template>
 
@@ -26,7 +26,7 @@ export default {
         if (response.data)
         {
           this.$store.commit('session/setMasterSessionCode', response.data.code);
-          this.$router.push('/question');
+          this.$router.push('/' + response.data.code);
         }
       }).catch(err =>
       {
@@ -38,14 +38,16 @@ export default {
     {
       SESSION_JOIN(this.existingSessionCode).then((response) =>
       {
+        // eslint-disable-next-line no-debugger
+        debugger;
         if (response.data)
         {
           this.$store.commit('session/setChildSessionCode', response.data.code);
-          this.$router.push('/question');
+          this.$router.push('/' + response.data.code);
         }
-      }).catch((error) =>
+      }).catch(err =>
       {
-        console.log(error);
+        console.error(err);
       });
     }
   }
